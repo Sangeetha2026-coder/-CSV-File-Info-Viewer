@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSV Data Analyzer</title>
+    <!-- ✅ Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container my-5">
+        <h1 class="mb-4 text-center">📊 CSV Data Analyzer</h1>
+
+        <!-- ✅ Summary Cards -->
+        <div class="row text-center mb-4">
+            <div class="col-md-4">
+                <div class="card border-primary">
+                    <div class="card-body">
+                        <h5 class="card-title">📄 Total Rows</h5>
+                        <p class="card-text display-6">{{ data[0] }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-success">
+                    <div class="card-body">
+                        <h5 class="card-title">📊 Total Columns</h5>
+                        <p class="card-text display-6">{{ data[1]  }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-danger">
+                    <div class="card-body">
+                        <h5 class="card-title">❗ Null Values</h5>
+                        <p class="card-text display-6">{{ total_nulls }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ✅ Descriptive Statistics Table -->
+        <h3>📌 Descriptive Statistics</h3>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Column</th>
+                        <th>Count</th>
+                        <th>Mean</th>
+                        <th>Std</th>
+                        <th>Min</th>
+                        <th>25%</th>
+                        <th>50%</th>
+                        <th>75%</th>
+                        <th>Max</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for col, stats in desc.items() %}
+                    <tr>
+                        <td>{{ col }}</td>
+                        <td>{{ stats['count'] }}</td>
+                        <td>{{ stats['mean'] }}</td>
+                        <td>{{ stats['std'] }}</td>
+                        <td>{{ stats['min'] }}</td>
+                        <td>{{ stats['25%'] }}</td>
+                        <td>{{ stats['50%'] }}</td>
+                        <td>{{ stats['75%'] }}</td>
+                        <td>{{ stats['max'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ✅ Export to JSON Button -->
+        <form action="/export_json" method="post">
+            <input type="hidden" name="filename" value="{{ filename }}">
+            <button class="btn btn-outline-primary">⬇️ Export to JSON</button>
+        </form>
+
+        <div class="text-center mt-5">
+            <a href="/" class="btn btn-secondary">⬅️ Upload Another File</a>
+        </div>
+    </div>
+
+</body>
+</html>
