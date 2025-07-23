@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, send_file
 import pandas as pd
 import os
+import json
 
 app = Flask(__name__)
 UPLOAD_FOLDER = 'uploads'
@@ -41,9 +42,17 @@ def export_json():
     json_file = r"C:\Users\DELL\Documents\Sangeetha\Python\project\Data Exploration & Preprocessing\csv file into viewer\uploads\sample_data.json"
 
     try:
-        df = pd.read_csv(csv_file)                    
-        df.to_json(json_file, orient="records", lines=True) 
-        return send_file(json_file, as_attachment=True) 
+        df = pd.read_csv(csv_file)  
+        df=df.fillna(0)                  
+        records = df.to_dict(orient="records") 
+        wrapped_data = {"data": records}
+        
+        
+        with open(json_file, "w") as f:
+            json.dump(wrapped_data, f, indent=4)
+
+        
+        return send_file(json_file, as_attachment=True)
     except Exception as e:
         return f"Error: {str(e)}"
 
